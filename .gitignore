@@ -1,0 +1,5 @@
+/target
+/src/config.rs
+/src/config/base_uri.txt
+.DS_STORE
+/.vscode
