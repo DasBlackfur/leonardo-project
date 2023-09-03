@@ -1,3 +1,4 @@
+use anyhow::Context;
 use axum::{extract::Path, response::Html, routing::get, Json, Router};
 use config::{PASSWORD, USERNAME};
 use error::AppError;
@@ -76,10 +77,10 @@ async fn get_plan_data(
         let current_uri = dom
             .select(&Selector::parse(".nav-right-button").unwrap())
             .next()
-            .unwrap()
+            .context("Nav Bar not found")?
             .value()
             .attr("onclick")
-            .unwrap()
+            .context("onclick attribute not found")?
             .to_owned();
         if current_uri == previous_uri {
             done = true;
@@ -91,7 +92,7 @@ async fn get_plan_data(
         let day = dom
             .select(&Selector::parse("h1").unwrap())
             .next()
-            .unwrap()
+            .context("day element not found")?
             .inner_html()
             .trim_matches('\n')
             .to_owned();
@@ -123,31 +124,31 @@ async fn get_plan_data(
                     day: day.clone(),
                     class: columns
                         .get(0)
-                        .unwrap_or(&"CLASS ELEMENT NOT FOUND".to_owned())
+                        .context("class element not found")?
                         .to_owned(),
                     lesson: columns
                         .get(1)
-                        .unwrap_or(&"LESSON ELEMENT NOT FOUND".to_owned())
+                        .context("lesson element not found")?
                         .to_owned(),
                     subject: columns
                         .get(2)
-                        .unwrap_or(&"SUBJECT ELEMENT NOT FOUND".to_owned())
+                        .context("subject element not found")?
                         .to_owned(),
                     room: columns
                         .get(3)
-                        .unwrap_or(&"ROOM ELEMENT NOT FOUND".to_owned())
+                        .context("room element not found")?
                         .to_owned(),
                     teachers: columns
                         .get(4)
-                        .unwrap_or(&"TEACHER ELEMENT NOT FOUND".to_owned())
+                        .context("teachers element not found")?
                         .to_owned(),
                     info: columns
                         .get(5)
-                        .unwrap_or(&"TYPE ELEMENT NOT FOUND".to_owned())
+                        .context("type element not found")?
                         .to_owned(),
                     notes: columns
                         .get(6)
-                        .unwrap_or(&"NOTES ELEMENT NOT FOUND".to_owned())
+                        .context("notes element not found")?
                         .to_owned(),
                 });
             }
@@ -158,7 +159,7 @@ async fn get_plan_data(
 }
 
 async fn get_hint() -> Html<String> {
-    Html("Use /total or /get/<classname>".to_owned())
+    Html("Use /total or /get/classname".to_owned())
 }
 async fn get_total() -> Result<Json<TotalPlan>, AppError> {
     let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), None).await?;
