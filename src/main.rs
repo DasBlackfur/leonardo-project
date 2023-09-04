@@ -159,13 +159,16 @@ async fn get_plan_data(
 }
 
 async fn get_hint() -> Html<String> {
+    info!("Requested hint");
     Html("Use /total or /get/classname".to_owned())
 }
 async fn get_total() -> Result<Json<TotalPlan>, AppError> {
+    info!("Requested total data");
     let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), None).await?;
     Ok(Json(plan))
 }
 async fn get_class(Path(class): Path<String>) -> Result<Json<TotalPlan>, AppError> {
+    info!("Requested data for class {&class}");
     let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), Some(class)).await?;
     Ok(Json(plan))
 }
