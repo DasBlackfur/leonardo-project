@@ -5,6 +5,7 @@ use error::AppError;
 use reqwest::Client;
 use scraper::{Html as HtmlParser, Selector};
 use serde::Serialize;
+use tokio::time::Instant;
 use std::net::SocketAddr;
 use tracing::info;
 
@@ -55,7 +56,7 @@ async fn main() {
 async fn get_plan_data(
     username: String,
     password: String,
-    filter: Option<String>,
+    filter: String,
 ) -> Result<TotalPlan, AppError> {
     let client = Client::new();
     let mut data: Vec<PlanData> = Vec::new();
@@ -119,7 +120,7 @@ async fn get_plan_data(
             } else {
                 previous_class = columns[0].clone();
             }
-            if filter.clone().unwrap_or("NOFILTER".to_string()) == columns[0].clone() || filter.is_none(){
+            if filter == columns[0].clone() || filter == "NOFILTER" {
                 data.push(PlanData {
                     day: day.clone(),
                     class: columns
@@ -159,16 +160,22 @@ async fn get_plan_data(
 }
 
 async fn get_hint() -> Html<String> {
-    info!("Requested hint");
+    let start = Instant::now();
+    let duration = start.elapsed().as_millis();
+    info!("Request / took {}ms", duration);
     Html("Use /total or /get/classname".to_owned())
 }
 async fn get_total() -> Result<Json<TotalPlan>, AppError> {
-    info!("Requested total data");
-    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), None).await?;
+    let start = Instant::now();
+    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), "NOFILTER".to_owned()).await?;
+    let duration = start.elapsed().as_millis();
+    info!("Request /total took {}ms", duration);
     Ok(Json(plan))
 }
 async fn get_class(Path(class): Path<String>) -> Result<Json<TotalPlan>, AppError> {
-    info!("Requested data for class {}", &class);
-    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), Some(class)).await?;
+    let start = Instant::now();
+    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), class).await?;
+    let duration = start.elapsed().as_millis();
+    info!("Request /total took {}ms", duration);
     Ok(Json(plan))
 }
