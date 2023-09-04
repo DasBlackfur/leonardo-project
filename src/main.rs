@@ -168,7 +168,7 @@ async fn get_total() -> Result<Json<TotalPlan>, AppError> {
     Ok(Json(plan))
 }
 async fn get_class(Path(class): Path<String>) -> Result<Json<TotalPlan>, AppError> {
-    info!("Requested data for class {&class}");
+    info!("Requested data for class {}", &class);
     let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), Some(class)).await?;
     Ok(Json(plan))
 }
