@@ -174,8 +174,8 @@ async fn get_total() -> Result<Json<TotalPlan>, AppError> {
 }
 async fn get_class(Path(class): Path<String>) -> Result<Json<TotalPlan>, AppError> {
     let start = Instant::now();
-    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), class).await?;
+    let plan = get_plan_data(USERNAME.to_owned(), PASSWORD.to_owned(), class.clone()).await?;
     let duration = start.elapsed().as_millis();
-    info!("Request /total took {}ms", duration);
+    info!("Request /get/{} took {}ms", class, duration);
     Ok(Json(plan))
 }
