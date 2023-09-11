@@ -3,3 +3,4 @@ leonardo-api/src/config.rs
 leonardo-api/src/config/base_uri.txt
 .DS_STORE
 .vscode
+leonardo-bot/configured.bot.py
