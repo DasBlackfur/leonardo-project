@@ -4,7 +4,7 @@ import asyncio
 import json
 
 # Konfiguration
-WEB_URL = "http://45.131.109.213:8000/get/CLASSNAME"
+WEB_URL = "https://blackfur.oops.wtf/get/CLASSNAME"
 DISCORD_TOKEN = "TOKEN_HERE"
 MAIN_CHANNEL_ID = 0 # Channel id where to send main message
 ERROR_CHANNEL_ID = 0 # Channel id where to send error messages

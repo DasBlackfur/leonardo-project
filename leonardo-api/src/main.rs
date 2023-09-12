@@ -1,9 +1,10 @@
 use axum::{extract::Path, response::Html, routing::get, Json, Router};
+use axum_server::tls_rustls::RustlsConfig;
 use std::net::SocketAddr;
 use tokio::time::Instant;
 use tracing::info;
 
-use config::{PASSWORD, USERNAME};
+use config::*;
 use data::TotalPlan;
 use error::AppError;
 
@@ -21,9 +22,13 @@ async fn main() {
         .route("/total", get(get_total))
         .route("/get/:class", get(get_class));
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
+    let config = RustlsConfig::from_pem_file(CERT_PATH, KEY_PATH)
+        .await
+        .unwrap();
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], 443));
     info!("Starting server on {}", addr);
-    axum::Server::bind(&addr)
+    axum_server::bind_rustls(addr, config)
         .serve(app.into_make_service())
         .await
         .unwrap();

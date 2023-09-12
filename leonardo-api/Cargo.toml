@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 tokio = { version = "*", features = ["full"]}
 axum = "*"
+axum-server = { version = "*", features = ["tls-rustls"]}
 tracing = "*"
 tracing-subscriber = "*"
 reqwest = "*"
