@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
-
 use anyhow::Context;
-use tracing::error;
 
 use crate::{
     data::{PlanData, TotalPlan},
@@ -38,22 +36,22 @@ impl PlanData {
             }
         }
 
-        return self.lesson.cmp(&other.lesson);
+        self.lesson.cmp(&other.lesson)
     }
 }
 
-fn compare_dates(left: &String, right: &String) -> Result<Ordering, AppError> {
+fn compare_dates(left: &str, right: &str) -> Result<Ordering, AppError> {
     let left: Vec<_> = left
-        .split(" ")
+        .split(' ')
         .nth(1)
         .context("date format error")?
-        .split(".")
+        .split('.')
         .collect();
     let right: Vec<_> = right
-        .split(" ")
+        .split(' ')
         .nth(1)
         .context("date format error")?
-        .split(".")
+        .split('.')
         .collect();
     let year = left
         .get(2)
@@ -69,8 +67,7 @@ fn compare_dates(left: &String, right: &String) -> Result<Ordering, AppError> {
     if month != Ordering::Equal {
         return Ok(month);
     }
-    return Ok(left
-        .get(0)
+    Ok(left.first()
         .context("date format error")?
-        .cmp(right.get(0).context("date format error")?));
+        .cmp(right.first().context("date format error")?))
 }

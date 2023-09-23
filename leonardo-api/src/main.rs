@@ -38,7 +38,7 @@ async fn get_hint() -> Html<String> {
     let start = Instant::now();
     let duration = start.elapsed().as_millis();
     info!("Request / took {}ms", duration);
-    Html("Use /total or /get/classname".to_owned())
+    Html("<h1>Use /total or /get/classname</h1>".to_owned())
 }
 async fn get_total() -> Result<Json<TotalPlan>, AppError> {
     let start = Instant::now();
