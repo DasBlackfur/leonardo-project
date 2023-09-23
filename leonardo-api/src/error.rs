@@ -4,6 +4,7 @@ use axum::Json;
 use serde::Serialize;
 use tracing::error;
 
+#[derive(Debug)]
 pub struct AppError(anyhow::Error);
 
 #[derive(Serialize)]
@@ -13,7 +14,7 @@ pub struct ErrorInfo {
 
 impl IntoResponse for AppError {
     fn into_response(self) -> axum::response::Response {
-        error!("There was an error!\nInfo: {}", self.0.to_string());
+        self.print_error();
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(ErrorInfo {
@@ -21,6 +22,12 @@ impl IntoResponse for AppError {
             }),
         )
             .into_response()
+    }
+}
+
+impl AppError {
+    pub fn print_error(&self) {
+        error!("There was an error!\nInfo: {}", self.0.to_string());
     }
 }
 

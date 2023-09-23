@@ -139,7 +139,6 @@ impl TotalPlan {
         }
 
         let mut plan = TotalPlan { infos, data };
-
         plan.dedup();
 
         Ok(plan)
