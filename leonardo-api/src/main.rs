@@ -28,7 +28,7 @@ async fn main() {
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 443));
     info!("Starting server on {}", addr);
-    axum_server::bind_rustls(addr, config)
+    axum_server_dual_protocol::bind_dual_protocol(addr, config)
         .serve(app.into_make_service())
         .await
         .unwrap();

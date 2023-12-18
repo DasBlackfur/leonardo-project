@@ -1,5 +1,5 @@
-use std::cmp::Ordering;
 use anyhow::Context;
+use std::cmp::Ordering;
 
 use crate::{
     data::{PlanData, TotalPlan},
@@ -67,7 +67,8 @@ fn compare_dates(left: &str, right: &str) -> Result<Ordering, AppError> {
     if month != Ordering::Equal {
         return Ok(month);
     }
-    Ok(left.first()
+    Ok(left
+        .first()
         .context("date format error")?
         .cmp(right.first().context("date format error")?))
 }
