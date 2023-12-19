@@ -8,7 +8,7 @@ default-run = "leonardo"
 
 [dependencies]
 tokio = { version = "*", features = ["full"]}
-axum = "*"
+axum = "0.6"
 axum-server = { version = "*", features = ["tls-rustls"]}
 axum-server-dual-protocol = "*"
 tracing = "*"
