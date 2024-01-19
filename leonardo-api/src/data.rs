@@ -112,7 +112,7 @@ impl TotalPlan {
                     data.push(PlanData {
                         day: day.clone(),
                         class: columns
-                            .get(0)
+                            .first()
                             .context("class element not found")?
                             .to_owned(),
                         lesson: columns
